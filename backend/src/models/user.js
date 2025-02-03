@@ -18,7 +18,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     minLength: 6,
-    maxLength: 25,
   },
   contact: {
     type: String,
@@ -60,6 +59,10 @@ const userSchema = new mongoose.Schema({
       default: [],
     },
   ],
+  membership: {
+    type: String,
+    enum: ["Amateur", "Advanced", "Elite"],
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);
