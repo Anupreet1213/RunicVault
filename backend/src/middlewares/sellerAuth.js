@@ -1,7 +1,7 @@
-const User = require("../models/user");
+const Seller = require("../models/seller");
 const jwt = require("jsonwebtoken");
 
-const authMiddleware = async (req, res, next) => {
+const sellerAuth = async (req, res, next) => {
   try {
     const { token } = req.cookies;
 
@@ -13,10 +13,10 @@ const authMiddleware = async (req, res, next) => {
 
     const { _id } = decodeMsg;
 
-    const user = await User.findById(_id);
+    const seller = await Seller.findById(_id);
 
-    if (!user) {
-      throw new Error("Invalid user!!");
+    if (!seller) {
+      throw new Error("Invalid seller!!");
     }
 
     next();
@@ -25,4 +25,4 @@ const authMiddleware = async (req, res, next) => {
   }
 };
 
-module.exports = authMiddleware;
+module.exports = sellerAuth;

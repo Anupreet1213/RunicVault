@@ -25,13 +25,11 @@ const gameSchema = new mongoose.Schema({
   trailer_url: {
     type: String,
   },
-  preview_img: [
-    {
-      type: String,
-      required: true,
-      validate: [arrayLimit, "Exceeds the limit of 5 for preview images"],
-    },
-  ],
+  preview_img: {
+    type: [String],
+    required: true,
+    validate: [arrayLimit, "Exceeds the limit of 5 for preview images"],
+  },
   sys_req: {
     os: {
       type: [String],

@@ -18,7 +18,6 @@ const sellerSchema = new mongoose.Schema({
     type: String,
     required: true,
     minLength: 6,
-    maxLength: 25,
   },
   contact: {
     type: String,
