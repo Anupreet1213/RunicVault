@@ -3,6 +3,8 @@ const express = require("express");
 const connectDB = require("./config/database");
 const authRoute = require("./routes/authRoute");
 const gameRoute = require("./routes/gameRoute");
+const userRoute = require("./routes/userRoute");
+const sellerRoute = require("./routes/sellerRoute");
 const userAuth = require("./middlewares/userAuth");
 const sellerAuth = require("./middlewares/sellerAuth");
 const cookieParser = require("cookie-parser");
@@ -16,6 +18,8 @@ app.use(cookieParser());
 
 app.use("/api/auth", authRoute);
 app.use("/api/game", gameRoute);
+app.use("/api/user", userRoute);
+app.use("/api/seller", sellerRoute);
 
 //Just for testing purpose
 app.get("/api/test", userAuth, (req, res) => {

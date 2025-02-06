@@ -57,7 +57,7 @@ const signin = async (req, res) => {
     const { email, password, type } = req.body;
     let token;
 
-    if (!authValidator(email, password)) {
+    if (type != "Admin" && !authValidator(email, password)) {
       throw new Error("Invalid credentials in Signin");
     }
 
@@ -77,7 +77,7 @@ const signin = async (req, res) => {
       token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY, {
         expiresIn: "1d",
       });
-    } else {
+    } else if (type === "Seller") {
       const seller = await Seller.findOne({ email });
 
       if (!seller) {
@@ -93,6 +93,16 @@ const signin = async (req, res) => {
       token = jwt.sign({ _id: seller._id }, process.env.SECRET_KEY, {
         expiresIn: "1d",
       });
+    } else {
+      if (password === process.env.ADMIN_SECRET_KEY) {
+        token = jwt.sign(
+          { _id: process.env.ADMIN_SECRET_KEY },
+          process.env.SECRET_KEY,
+          {
+            expiresIn: "1d",
+          }
+        );
+      }
     }
 
     res.cookie("token", token, {
