@@ -10,11 +10,22 @@ const sellerAuth = require("./middlewares/sellerAuth");
 const cookieParser = require("cookie-parser");
 const PORT = 5000;
 const app = express();
+const cors = require("cors");
 
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+const corsOptions = {
+  origin: "http://localhost:5173",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+};
+
+// Use the CORS middleware
+app.use(cors(corsOptions));
 
 app.use("/api/auth", authRoute);
 app.use("/api/game", gameRoute);
