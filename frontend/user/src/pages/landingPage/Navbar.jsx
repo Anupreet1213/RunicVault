@@ -1,9 +1,21 @@
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { FaRegUserCircle } from "react-icons/fa";
+import { CiShoppingCart } from "react-icons/ci";
+import { useLocation, useNavigate } from "react-router-dom";
+import { removeUser } from "../../utils/userSlice";
+import { removeSeller } from "../../utils/sellerSlice";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const user = useSelector((store) => store.user);
+  const location = useLocation();
+  const isBlackBg = ["/wishlist", "/cart", "/myPurchases"].includes(
+    location.pathname
+  );
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,7 +32,7 @@ const Navbar = () => {
     };
   }, []);
 
-  const handleSignout = async () => {
+  const handleLogout = async () => {
     try {
       const response = await fetch("/api/auth/signout", {
         method: "GET",
@@ -30,6 +42,11 @@ const Navbar = () => {
       if (!response.ok) {
         throw new Error("Signout failed");
       }
+
+      dispatch(removeUser());
+      dispatch(removeSeller());
+      localStorage.removeItem("type");
+      navigate("/");
     } catch (error) {
       console.error("Error signing out:", error.message);
     }
@@ -38,7 +55,11 @@ const Navbar = () => {
   return (
     <header
       className={`fixed top-0 z-10 w-full transition-all duration-300 font-kdam py-2 ${
-        scrolled ? "bg-[#181713]/80 shadow-md" : "bg-transparent"
+        isBlackBg
+          ? "bg-black"
+          : scrolled
+          ? "bg-[#181713]/80 shadow-md"
+          : "bg-transparent"
       }`}
     >
       <div className="mx-auto flex h-16 max-w-screen-xl items-center gap-8 ">
@@ -59,26 +80,25 @@ const Navbar = () => {
         <h1 className="text-[#F7EBD1] text-2xl">ARACDE X</h1>
 
         <div className="flex flex-1 items-center justify-end md:justify-between">
-          <nav aria-label="Global" className="hidden md:block">
-            {/* <ul className="flex items-center gap-6 text-sm">
-              {[
-                "About",
-                "Careers",
-                "History",
-                "Services",
-                "Projects",
-                "Blog",
-              ].map((item) => (
-                <li key={item}>
-                  <a
-                    className="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75"
-                    href="#"
-                  >
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul> */}
+          <nav aria-label="Global" className=" flex gap-6">
+            <a
+              className="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75"
+              href="#"
+            >
+              Wishlist
+            </a>
+            <a
+              className="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75"
+              href="#"
+            >
+              My Purchases
+            </a>
+            <a
+              className="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75"
+              href="#"
+            >
+              Membership Plans
+            </a>
           </nav>
 
           <div className="flex items-center gap-4">
@@ -86,7 +106,7 @@ const Navbar = () => {
               <div className="sm:flex sm:gap-4">
                 <a
                   className="block rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-teal-700 dark:hover:bg-teal-500"
-                  href="#"
+                  onClick={() => navigate("/auth/login")}
                 >
                   Sign In
                 </a>
@@ -99,11 +119,14 @@ const Navbar = () => {
                 </a>
               </div>
             ) : (
-              <div className="sm:flex sm:gap-4">
+              <div className="sm:gap-4 text-white flex items-center">
+                <div>
+                  <CiShoppingCart size={24} />
+                </div>
+                <FaRegUserCircle size={24} />
                 <a
                   className="block rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-teal-700 dark:hover:bg-teal-500"
-                  href="#"
-                  onClick={handleSignout}
+                  onClick={handleLogout}
                 >
                   Sign Out
                 </a>

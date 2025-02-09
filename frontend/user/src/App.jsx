@@ -7,6 +7,10 @@ import Signup from "./pages/authPage/Signup";
 import LandingPage from "./pages/landingPage/LandingPage";
 import "./App.css";
 import axios from "axios";
+import UserGames from "./pages/userGamePage/UserGames";
+// import ProtectedRoute from "./hooks/ProtectedRoute";
+// import SellerDashboard from "./pages/sellerPage/SellerDashboard";
+// import ProtectedRoute from "./hooks/ProtectedRoute";
 
 function App() {
   const dispatch = useDispatch();
@@ -21,7 +25,10 @@ function App() {
           { type: type },
           { withCredentials: true }
         );
-        if (!response.ok) throw new Error("User not authenticated");
+
+        if (response.data.length === 0) {
+          throw new Error("User not authenticated");
+        }
 
         console.log(response.data.data);
 
@@ -39,7 +46,20 @@ function App() {
   const appRouter = createBrowserRouter([
     { path: "/auth/signup", element: <Signup /> },
     { path: "/auth/login", element: <Login /> },
+    { path: "/wishlist", element: <UserGames /> },
+    { path: "/myPurchases", element: <UserGames /> },
+    { path: "/cart", element: <UserGames /> },
     { path: "/", element: <LandingPage /> },
+
+    // {
+    //   path: "/seller",
+    //   element: (
+    //     <ProtectedRoute requiredType="Seller">
+    //       {" "}
+    //       <SellerDashboard />
+    //     </ProtectedRoute>
+    //   ),
+    // },
   ]);
 
   return <RouterProvider router={appRouter} />;

@@ -1,17 +1,17 @@
 const FreeGames = () => {
   return (
-    <section className="w-screen h-screen text-white relative transition-all duration-500 font-kdam">
-      <div
+    <section className="h-screen bg-black text-white relative transition-all duration-500 font-kdam">
+      {/* <div
         className="absolute inset-0 brightness-25 -z-1 bg-black"
         // style={{
         //   backgroundImage: `url(${bgImage})`,
         //   backgroundSize: "cover",
         //   backgroundPosition: "center",
         // }}
-      ></div>
+      ></div> */}
 
-      <div className="w-full !p-20 flex flex-col gap-10">
-        <div className="w-full bg-[#1C1C1C] !p-16 flex flex-col gap-8 rounded-lg">
+      <div className="!p-20 flex flex-col gap-10">
+        <div className=" bg-[#1C1C1C] !p-16 flex flex-col gap-8 rounded-lg">
           <div className="flex gap-4 items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"

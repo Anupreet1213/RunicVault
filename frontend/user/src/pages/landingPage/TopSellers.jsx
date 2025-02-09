@@ -39,7 +39,7 @@ const TopSellers = () => {
   }, []);
 
   return (
-    <section className="w-screen text-white relative transition-all duration-500 font-kdam">
+    <section className=" text-white relative transition-all duration-500 font-kdam">
       <div
         className="absolute inset-0 brightness-25 -z-1 bg-black"
         // style={{
@@ -48,7 +48,7 @@ const TopSellers = () => {
         //   backgroundPosition: "center",
         // }}
       ></div>
-      <div className="w-full p-20 flex flex-col gap-10">
+      <div className="p-20 flex flex-col gap-10">
         <div>
           <h1 className="!text-4xl">Top Sellers</h1>
         </div>

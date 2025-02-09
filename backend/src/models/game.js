@@ -79,6 +79,11 @@ const gameSchema = new mongoose.Schema({
     enum: ["Action", "Adventure", "Open-world", "Horror", "Simulation", "RPG"],
     required: true,
   },
+  iarc: {
+    type: String,
+    enum: ["3", "7", "12", "18"],
+    required: true,
+  },
 });
 
 function arrayLimit(val) {

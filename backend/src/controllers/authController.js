@@ -136,8 +136,8 @@ const refresh = async (req, res) => {
   try {
     const { token } = req.cookies;
     const { type } = req.body;
-    console.log(req.body);
-    console.log(req.cookies);
+    // console.log(req.body);
+    // console.log(req.cookies);
 
     let data;
 
@@ -163,7 +163,7 @@ const refresh = async (req, res) => {
       }
     }
 
-    console.log(data);
+    // console.log(data);
 
     res.json({ data: data });
   } catch (err) {
