@@ -34,10 +34,126 @@ const UploadGame = ({ setGames }) => {
       [name]: value,
     }));
   };
-  const handleUpload = () => {
-    //
-    if (gameDetails.title) {
-      setGames((prevGames) => [...prevGames, gameDetails]);
+
+  const handleChangeNested = (e) => {
+    const { name, value } = e.target;
+
+    setGameDetails((prevDetails) => ({
+      ...prevDetails,
+      sysReq: {
+        ...prevDetails.sysReq,
+        [name]: value,
+      },
+    }));
+  };
+  // const handleUpload = async () => {
+  //   if (!gameDetails.title || !gameDetails.description || !gameDetails.bannerImg) {
+  //     console.error("Title, description, and banner image are required.");
+  //     return;
+  //   }
+
+  //   try {
+  //     const formData = new FormData();
+  //     formData.append("image", gameDetails.bannerImg);
+
+  //     // Upload banner image
+  //     const bannerResponse = await axios.post(
+  //       "http://localhost:5000/api/game/uploadBanner",
+  //       formData
+  //     );
+  //     const bannerUrl = bannerResponse.data.bannerUrl;
+
+  //     // Upload preview images
+  //     const previewFormData = new FormData();
+  //     gameDetails.previewImgs.forEach((previewImg) => {
+  //       previewFormData.append("images", previewImg);
+  //     });
+
+  //     const previewResponse = await axios.post(
+  //       "http://localhost:5000/api/game/uploadPreviews",
+  //       previewFormData
+  //     );
+  //     const previewUrls = previewResponse.data.previewUrls;
+
+  //     // Construct final game object
+  //     const finalGameData = {
+  //       ...gameDetails,
+  //       bannerImg: bannerUrl,
+  //       previewImgs: previewUrls,
+  //     };
+
+  //     // Send game details to backend
+  //     const gameUploadResponse = await axios.post(
+  //       "http://localhost:5000/api/game/uploadGame",
+  //       finalGameData
+  //     );
+
+  //     console.log("Game uploaded successfully:", gameUploadResponse.data);
+
+  //     // Update state to reflect the new game
+  //     setGames((prevGames) => [...prevGames, finalGameData]);
+
+  //     // Reset form fields
+  //     setGameDetails({
+  //       title: "",
+  //       description: "",
+  //       author: "",
+  //       bannerImg: "",
+  //       trailerUrl: "",
+  //       previewImgs: [],
+  //       sysReq: { os: [], gpu: "", memory: "", storage: "" },
+  //       online: false,
+  //       price: "",
+  //       multiplayer: false,
+  //       tier: "Basic",
+  //       genre: "Action",
+  //       iarc: "3",
+  //     });
+
+  //     if (bannerRef.current) bannerRef.current.value = "";
+  //     if (previewRef.current) previewRef.current.value = "";
+
+  //   } catch (error) {
+  //     console.error("Error uploading game:", error);
+  //   }
+  // };
+  const handleUpload = async () => {
+    if (
+      !gameDetails.title ||
+      !gameDetails.description ||
+      !gameDetails.bannerImg
+    ) {
+      console.error("Title, description, and banner image are required.");
+      return;
+    }
+
+    try {
+      // Upload banner image
+      const bannerUrl = await handleBannerUpload();
+
+      // Upload preview images
+      const previewUrls = await handlePreviewUpload();
+
+      //game object with url
+      const finalGameData = {
+        ...gameDetails,
+        bannerImg: bannerUrl,
+        previewImgs: previewUrls,
+      };
+
+      // Send game details to backend
+      const gameUploadResponse = await axios.post(
+        "http://localhost:5000/api/game/addGame",
+        finalGameData,
+        { withCredentials: true }
+      );
+
+      console.log("Game uploaded successfully:", gameUploadResponse.data);
+
+      // Update state to reflect the new game
+      setGames((prevGames) => [...prevGames, finalGameData]);
+
+      // Reset form fields
       setGameDetails({
         title: "",
         description: "",
@@ -53,6 +169,11 @@ const UploadGame = ({ setGames }) => {
         genre: "Action",
         iarc: "3",
       });
+
+      if (bannerRef.current) bannerRef.current.value = "";
+      if (previewRef.current) previewRef.current.value = "";
+    } catch (error) {
+      console.error("Error uploading game:", error);
     }
   };
 
@@ -282,10 +403,10 @@ const UploadGame = ({ setGames }) => {
           <label className="text-gray-300 font-semibold">GPU</label>
           <input
             type="text"
-            name="sysReq.gpu"
+            name="gpu"
             placeholder="Enter GPU"
             value={gameDetails.sysReq.gpu}
-            onChange={handleChange}
+            onChange={handleChangeNested}
             className="w-full p-3 mt-2 bg-gray-800 rounded-lg text-white"
           />
         </div>
@@ -293,10 +414,10 @@ const UploadGame = ({ setGames }) => {
           <label className="text-gray-300 font-semibold">Memory</label>
           <input
             type="text"
-            name="sysReq.memory"
+            name="memory"
             placeholder="Enter Memory"
             value={gameDetails.sysReq.memory}
-            onChange={handleChange}
+            onChange={handleChangeNested}
             className="w-full p-3 mt-2 bg-gray-800 rounded-lg text-white"
           />
         </div>
@@ -304,10 +425,10 @@ const UploadGame = ({ setGames }) => {
           <label className="text-gray-300 font-semibold">Storage</label>
           <input
             type="text"
-            name="sysReq.storage"
+            name="storage"
             placeholder="Enter Storage"
             value={gameDetails.sysReq.storage}
-            onChange={handleChange}
+            onChange={handleChangeNested}
             className="w-full p-3 mt-2 bg-gray-800 rounded-lg text-white"
           />
         </div>
