@@ -1,11 +1,13 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { FaTimes } from "react-icons/fa";
+import axios from "axios";
 
 const UploadGame = ({ setGames }) => {
   const [gameDetails, setGameDetails] = useState({
     title: "",
     description: "",
-    author: "", // Assuming this is selected or autofilled (e.g., logged-in seller ID)
+    author: "",
     bannerImg: "",
     trailerUrl: "",
     previewImgs: [],
@@ -18,10 +20,12 @@ const UploadGame = ({ setGames }) => {
     online: false,
     price: "",
     multiplayer: false,
-    tier: "Basic", // Default to Basic, could be a dropdown
-    genre: "Action", // Default genre, could be a dropdown
-    iarc: "3", // Default IARC rating
+    tier: "Basic",
+    genre: "Action",
+    iarc: "3",
   });
+  const bannerRef = useRef(null);
+  const previewRef = useRef(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,11 +56,54 @@ const UploadGame = ({ setGames }) => {
     }
   };
 
+  // console.log(gameDetails.bannerImg);
+
   const handlePreviewRemove = (index) => {
     setGameDetails((prevDetails) => ({
       ...prevDetails,
       previewImgs: prevDetails.previewImgs.filter((_, i) => i !== index),
     }));
+
+    if (gameDetails.previewImgs.length === 1 && previewRef.current) {
+      previewRef.current.value = "";
+    }
+  };
+
+  const handleBannerRemove = () => {
+    setGameDetails((prevDetails) => ({
+      ...prevDetails,
+      bannerImg: "",
+    }));
+
+    if (bannerRef.current) {
+      bannerRef.current.value = "";
+    }
+  };
+
+  const handleClick = async () => {
+    console.log(gameDetails);
+
+    const uploadBannerImg = async () => {
+      try {
+        const formData = new FormData();
+        formData.append("image", gameDetails.bannerImg);
+
+        console.log(gameDetails);
+
+        const response = await axios.post(
+          "http://localhost:5000/api/game/uploadBanner",
+          formData
+        );
+
+        console.log(response.data);
+        return response.data.bannerUrl;
+      } catch (error) {
+        console.error("Error uploading banner:", error);
+      }
+    };
+
+    const bannerUrl = await uploadBannerImg();
+    console.log("Uploaded Banner URL:", bannerUrl);
   };
 
   return (
@@ -93,16 +140,45 @@ const UploadGame = ({ setGames }) => {
 
       {/* Banner Image Section */}
       <div className="mb-4">
-        <label className="text-gray-300 font-semibold">Banner Image URL</label>
+        <label className="text-gray-300 font-semibold">Banner Image</label>
         <input
-          type="text"
+          type="file"
           name="bannerImg"
-          placeholder="Enter Banner Image URL"
-          value={gameDetails.bannerImg}
-          onChange={handleChange}
-          className="w-full p-3 mt-2 bg-gray-800 rounded-lg text-white"
+          accept="image/*"
+          ref={bannerRef}
+          onChange={(e) => {
+            const file = e.target.files[0];
+
+            const path = URL.createObjectURL(file);
+
+            setGameDetails((prevDetails) => ({
+              ...prevDetails,
+              bannerImg: path,
+            }));
+          }}
+          className="w-full mt-2"
         />
+        {/* Display Banner Image */}
+        <div className="mt-4 flex gap-4 flex-wrap">
+          {gameDetails.bannerImg && (
+            <div className="relative w-24 h-32">
+              <img
+                src={gameDetails.bannerImg}
+                alt={`Banner Img`}
+                className="w-full h-full object-cover rounded-lg shadow-md"
+              />
+              <button
+                onClick={() => handleBannerRemove()}
+                className="absolute -top-2 -right-2 bg-red-600 text-white p-1 rounded-full shadow-lg hover:bg-red-700 transition"
+              >
+                <FaTimes className="w-4 h-4 hover:cursor-pointer" />
+              </button>
+            </div>
+          )}
+        </div>
       </div>
+
+      <button onClick={() => handleClick()}>Mujhe Dabao</button>
 
       {/* Trailer URL Section */}
       <div className="mb-4">
@@ -125,31 +201,33 @@ const UploadGame = ({ setGames }) => {
           name="previewImgs"
           accept="image/*"
           multiple
+          ref={previewRef}
           onChange={(e) => {
-            const files = Array.from(e.target.files).map((file) =>
-              URL.createObjectURL(file)
-            );
+            const files = Array.from(e.target.files)
+              .slice(0, 5 - gameDetails.previewImgs.length)
+              .map((file) => URL.createObjectURL(file));
+
             setGameDetails((prevDetails) => ({
               ...prevDetails,
-              previewImgs: [...prevDetails.previewImgs, ...files],
+              previewImgs: [...prevDetails.previewImgs, ...files].slice(0, 5),
             }));
           }}
           className="w-full mt-2"
         />
         {/* Display Preview Images */}
-        <div className="mt-4 flex gap-4">
+        <div className="mt-4 flex gap-4 flex-wrap">
           {gameDetails.previewImgs.map((img, index) => (
-            <div key={index} className="relative">
+            <div key={index} className="relative w-24 h-32">
               <img
                 src={img}
                 alt={`Preview ${index + 1}`}
-                className="w-20 h-20 object-cover rounded-lg"
+                className="w-full h-full object-cover rounded-lg shadow-md"
               />
               <button
                 onClick={() => handlePreviewRemove(index)}
-                className="absolute top-0 right-0 bg-red-600 text-white p-1 rounded-full"
+                className="absolute -top-2 -right-2 bg-red-600 text-white p-1 rounded-full shadow-lg hover:bg-red-700 transition"
               >
-                X
+                <FaTimes className="w-4 h-4 hover:cursor-pointer" />
               </button>
             </div>
           ))}
@@ -323,3 +401,78 @@ const UploadGame = ({ setGames }) => {
 };
 
 export default UploadGame;
+
+// const ManageGame = ({ games, setGames }) => {
+//   const handleDelete = (index) => {
+//     setGames(games.filter((_, i) => i !== index));
+//   };
+
+//   return (
+//     <section>
+//       <h2 className="text-2xl font-bold text-purple-400 mb-4">Manage Games</h2>
+//       <div className="overflow-x-auto">
+//         <table className="w-full bg-gray-800 rounded-lg shadow-lg border border-gray-700">
+//           <thead>
+//             <tr className="border-b border-gray-700 text-purple-400">
+//               <th className="p-3 text-left">Title</th>
+//               <th className="p-3 text-left">Genre</th>
+//               <th className="p-3 text-left">Price</th>
+//               <th className="p-3 text-left">Status</th>
+//               <th className="p-3 text-left">Banner</th>
+//               <th className="p-3 text-left">Preview Images (Max 5)</th>
+//               <th className="p-3 text-left">Actions</th>
+//             </tr>
+//           </thead>
+//           <tbody>
+//             {games.map((game, index) => (
+//               <tr
+//                 key={index}
+//                 className="border-b border-gray-700 hover:bg-gray-700 transition"
+//               >
+//                 <td className="p-3">{game.title}</td>
+//                 <td className="p-3">{game.genre}</td>
+//                 <td className="p-3">{game.price}</td>
+//                 <td className="p-3">
+//                   <span
+//                     className={`px-3 py-1 rounded text-sm font-bold ${
+//                       game.status === "approved"
+//                         ? "bg-green-600 text-black"
+//                         : "bg-yellow-500 text-black"
+//                     }`}
+//                   >
+//                     {game.status}
+//                   </span>
+//                 </td>
+//                 <td className="p-3">
+//                   <img
+//                     src={game.banner_img}
+//                     alt="Banner"
+//                     className="w-20 h-12 rounded shadow"
+//                   />
+//                 </td>
+//                 <td className="p-3 flex gap-2">
+//                   {game.preview_img.slice(0, 5).map((img, i) => (
+//                     <img
+//                       key={i}
+//                       src={img}
+//                       alt={`Preview ${i + 1}`}
+//                       className="w-12 h-12 rounded shadow"
+//                     />
+//                   ))}
+//                 </td>
+//                 <td className="p-3">
+//                   <button
+//                     onClick={() => handleDelete(index)}
+//                     className="bg-red-500 px-4 py-2 rounded-lg text-black font-bold hover:bg-red-600 transition"
+//                   >
+//                     Delete
+//                   </button>
+//                 </td>
+//               </tr>
+//             ))}
+//           </tbody>
+//         </table>
+//       </div>
+//     </section>
+//   );
+// };

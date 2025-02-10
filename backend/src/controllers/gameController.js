@@ -1,5 +1,7 @@
 const Game = require("../models/game");
 const Seller = require("../models/seller");
+const cloudinary = require("../config/cloudinary");
+const upload = require("../middlewares/multerMiddleware");
 
 // {
 //     "title": "Cyber Quest",
@@ -119,4 +121,29 @@ const allGames = async (req, res) => {
   }
 };
 
-module.exports = { addGame, deleteGame, approveGame, rejectGame, allGames };
+const gameBannerUpload = async (req, res) => {
+  cloudinary.uploader.upload(req.file.path, function (err, result) {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({
+        success: false,
+        message: "Error",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Uploaded!",
+      data: result,
+    });
+  });
+};
+
+module.exports = {
+  addGame,
+  deleteGame,
+  approveGame,
+  rejectGame,
+  allGames,
+  gameBannerUpload,
+};

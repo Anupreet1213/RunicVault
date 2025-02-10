@@ -9,8 +9,7 @@ import "./App.css";
 import axios from "axios";
 import UserGames from "./pages/userGamePage/UserGames";
 // import ProtectedRoute from "./hooks/ProtectedRoute";
-// import SellerDashboard from "./pages/sellerPage/SellerDashboard";
-// import ProtectedRoute from "./hooks/ProtectedRoute";
+import SellerDashboard from "./pages/sellerPage/SellerDashboard";
 
 function App() {
   const dispatch = useDispatch();
@@ -50,15 +49,16 @@ function App() {
     { path: "/myPurchases", element: <UserGames /> },
     { path: "/cart", element: <UserGames /> },
     { path: "/", element: <LandingPage /> },
+    { path: "/seller", element: <SellerDashboard /> },
 
     // {
-    //   path: "/seller",
-    //   element: (
-    //     <ProtectedRoute requiredType="Seller">
-    //       {" "}
-    //       <SellerDashboard />
-    //     </ProtectedRoute>
-    //   ),
+    //   element: <ProtectedRoute requiredType={"Seller"} />,
+    //   children: [
+    //     {
+    //       path: "/seller",
+    //       element: <SellerDashboard />,
+    //     },
+    //   ],
     // },
   ]);
 

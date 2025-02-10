@@ -65,6 +65,7 @@ const Login = () => {
             email,
             games,
             isVerified,
+            type,
           })
         );
         navigate("/seller");

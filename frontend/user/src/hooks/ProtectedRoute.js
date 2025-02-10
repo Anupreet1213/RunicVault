@@ -1,15 +1,16 @@
 /* eslint-disable react/prop-types */
-// import { Navigate } from "react-router-dom";
-// import { useSelector } from "react-redux";
 
-// const ProtectedRoute = ({ children, requiredType }) => {
-//   const seller = useSelector((state) => state.seller);
+import { Navigate, Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-//   if (!seller || seller.type !== requiredType) {
-//     return <Navigate to="/" replace />;
-//   }
+const ProtectedRoute = ({ requiredType }) => {
+  const seller = useSelector((state) => state.seller);
 
-//   return children;
-// };
+  if (!seller || seller.type !== requiredType) {
+    return <Navigate to="/" replace />;
+  }
 
-// export default ProtectedRoute;
+  return <Outlet />;
+};
+
+export default ProtectedRoute;
