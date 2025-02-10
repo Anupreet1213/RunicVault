@@ -34,8 +34,8 @@ const UploadGame = ({ setGames }) => {
       [name]: value,
     }));
   };
-
   const handleUpload = () => {
+    //
     if (gameDetails.title) {
       setGames((prevGames) => [...prevGames, gameDetails]);
       setGameDetails({
@@ -80,9 +80,7 @@ const UploadGame = ({ setGames }) => {
     }
   };
 
-  const handleClick = async () => {
-    console.log(gameDetails);
-
+  const handleBannerUpload = async () => {
     const uploadBannerImg = async () => {
       try {
         const formData = new FormData();
@@ -103,6 +101,30 @@ const UploadGame = ({ setGames }) => {
     };
 
     const bannerUrl = await uploadBannerImg();
+    console.log("Uploaded Banner URL:", bannerUrl);
+  };
+
+  const handlePreviewUpload = async () => {
+    const uploadPreviewImg = async () => {
+      try {
+        const formData = new FormData();
+        gameDetails.previewImgs.forEach((previewImage) => {
+          formData.append("image", previewImage);
+        });
+
+        const response = await axios.post(
+          "http://localhost:5000/api/game/uploadPreviews",
+          formData
+        );
+
+        console.log(response.data);
+        return response.data.bannerUrl;
+      } catch (error) {
+        console.error("Error uploading banner:", error);
+      }
+    };
+
+    const bannerUrl = await uploadPreviewImg();
     console.log("Uploaded Banner URL:", bannerUrl);
   };
 
@@ -148,12 +170,11 @@ const UploadGame = ({ setGames }) => {
           ref={bannerRef}
           onChange={(e) => {
             const file = e.target.files[0];
-
-            const path = URL.createObjectURL(file);
+            // const path = URL.createObjectURL(file);
 
             setGameDetails((prevDetails) => ({
               ...prevDetails,
-              bannerImg: path,
+              bannerImg: file,
             }));
           }}
           className="w-full mt-2"
@@ -178,8 +199,6 @@ const UploadGame = ({ setGames }) => {
         </div>
       </div>
 
-      <button onClick={() => handleClick()}>Mujhe Dabao</button>
-
       {/* Trailer URL Section */}
       <div className="mb-4">
         <label className="text-gray-300 font-semibold">Trailer URL</label>
@@ -203,9 +222,10 @@ const UploadGame = ({ setGames }) => {
           multiple
           ref={previewRef}
           onChange={(e) => {
-            const files = Array.from(e.target.files)
-              .slice(0, 5 - gameDetails.previewImgs.length)
-              .map((file) => URL.createObjectURL(file));
+            const files = Array.from(e.target.files).slice(
+              0,
+              5 - gameDetails.previewImgs.length
+            );
 
             setGameDetails((prevDetails) => ({
               ...prevDetails,
