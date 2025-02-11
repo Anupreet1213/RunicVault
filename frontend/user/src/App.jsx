@@ -10,14 +10,24 @@ import axios from "axios";
 import UserGames from "./pages/userGamePage/UserGames";
 // import ProtectedRoute from "./hooks/ProtectedRoute";
 import SellerDashboard from "./pages/sellerPage/SellerDashboard";
+import { addSeller } from "./utils/sellerSlice";
+import { setGames } from "./utils/gameSlice";
+import GameDetailPage from "./pages/gamePage/GameDetailPage";
 
 function App() {
   const dispatch = useDispatch();
-  const user = useSelector((store) => store.user);
+  const { user, seller } = useSelector((store) => store);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
+        const responseGames = await axios.get(
+          "http://localhost:5000/api/game/landingPageGames",
+          { withCredentials: true }
+        );
+
+        dispatch(setGames(responseGames.data.data));
+
         const type = localStorage.getItem("type");
         const response = await axios.post(
           "http://localhost:5000/api/auth/refresh",
@@ -29,18 +39,22 @@ function App() {
           throw new Error("User not authenticated");
         }
 
-        console.log(response.data.data);
+        // console.log(response.data.data);
 
-        dispatch(addUser(response.data.data));
+        if (type === "User") {
+          dispatch(addUser(response.data.data));
+        } else if (type === "Seller") {
+          dispatch(addSeller(response.data.data));
+        }
       } catch (error) {
         console.error("Error fetching user:", error.message);
       }
     };
 
-    if (!user) {
+    if (!user && !seller) {
       fetchUser();
     }
-  }, [dispatch, user]);
+  }, [dispatch, user, seller]);
 
   const appRouter = createBrowserRouter([
     { path: "/auth/signup", element: <Signup /> },
@@ -50,6 +64,7 @@ function App() {
     { path: "/cart", element: <UserGames /> },
     { path: "/", element: <LandingPage /> },
     { path: "/seller", element: <SellerDashboard /> },
+    { path: "/game", element: <GameDetailPage /> },
 
     // {
     //   element: <ProtectedRoute requiredType={"Seller"} />,

@@ -1,17 +1,19 @@
 /* eslint-disable react/prop-types */
+
 import { useRef, useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
-const UploadGame = ({ setGames }) => {
+const UploadGame = ({ games, setGames }) => {
   const [gameDetails, setGameDetails] = useState({
     title: "",
     description: "",
     author: "",
-    bannerImg: "",
+    banner_img: "",
     trailerUrl: "",
-    previewImgs: [],
-    sysReq: {
+    preview_img: [],
+    sys_req: {
       os: [],
       gpu: "",
       memory: "",
@@ -26,6 +28,9 @@ const UploadGame = ({ setGames }) => {
   });
   const bannerRef = useRef(null);
   const previewRef = useRef(null);
+  //
+  const seller = useSelector((store) => store.seller);
+  console.log(seller);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,21 +45,21 @@ const UploadGame = ({ setGames }) => {
 
     setGameDetails((prevDetails) => ({
       ...prevDetails,
-      sysReq: {
-        ...prevDetails.sysReq,
+      sys_req: {
+        ...prevDetails.sys_req,
         [name]: value,
       },
     }));
   };
   // const handleUpload = async () => {
-  //   if (!gameDetails.title || !gameDetails.description || !gameDetails.bannerImg) {
+  //   if (!gameDetails.title || !gameDetails.description || !gameDetails.banner_img) {
   //     console.error("Title, description, and banner image are required.");
   //     return;
   //   }
 
   //   try {
   //     const formData = new FormData();
-  //     formData.append("image", gameDetails.bannerImg);
+  //     formData.append("image", gameDetails.banner_img);
 
   //     // Upload banner image
   //     const bannerResponse = await axios.post(
@@ -65,7 +70,7 @@ const UploadGame = ({ setGames }) => {
 
   //     // Upload preview images
   //     const previewFormData = new FormData();
-  //     gameDetails.previewImgs.forEach((previewImg) => {
+  //     gameDetails.preview_img.forEach((previewImg) => {
   //       previewFormData.append("images", previewImg);
   //     });
 
@@ -78,8 +83,8 @@ const UploadGame = ({ setGames }) => {
   //     // Construct final game object
   //     const finalGameData = {
   //       ...gameDetails,
-  //       bannerImg: bannerUrl,
-  //       previewImgs: previewUrls,
+  //       banner_img: bannerUrl,
+  //       preview_img: previewUrls,
   //     };
 
   //     // Send game details to backend
@@ -98,10 +103,10 @@ const UploadGame = ({ setGames }) => {
   //       title: "",
   //       description: "",
   //       author: "",
-  //       bannerImg: "",
+  //       banner_img: "",
   //       trailerUrl: "",
-  //       previewImgs: [],
-  //       sysReq: { os: [], gpu: "", memory: "", storage: "" },
+  //       preview_img: [],
+  //       sys_req: { os: [], gpu: "", memory: "", storage: "" },
   //       online: false,
   //       price: "",
   //       multiplayer: false,
@@ -121,7 +126,7 @@ const UploadGame = ({ setGames }) => {
     if (
       !gameDetails.title ||
       !gameDetails.description ||
-      !gameDetails.bannerImg
+      !gameDetails.banner_img
     ) {
       console.error("Title, description, and banner image are required.");
       return;
@@ -137,8 +142,9 @@ const UploadGame = ({ setGames }) => {
       //game object with url
       const finalGameData = {
         ...gameDetails,
-        bannerImg: bannerUrl,
-        previewImgs: previewUrls,
+        banner_img: bannerUrl,
+        preview_img: previewUrls,
+        author: seller._id,
       };
 
       // Send game details to backend
@@ -150,18 +156,16 @@ const UploadGame = ({ setGames }) => {
 
       console.log("Game uploaded successfully:", gameUploadResponse.data);
 
-      // Update state to reflect the new game
       setGames((prevGames) => [...prevGames, finalGameData]);
 
-      // Reset form fields
       setGameDetails({
         title: "",
         description: "",
         author: "",
-        bannerImg: "",
+        banner_img: "",
         trailerUrl: "",
-        previewImgs: [],
-        sysReq: { os: [], gpu: "", memory: "", storage: "" },
+        preview_img: [],
+        sys_req: { os: [], gpu: "", memory: "", storage: "" },
         online: false,
         price: "",
         multiplayer: false,
@@ -177,15 +181,13 @@ const UploadGame = ({ setGames }) => {
     }
   };
 
-  // console.log(gameDetails.bannerImg);
-
   const handlePreviewRemove = (index) => {
     setGameDetails((prevDetails) => ({
       ...prevDetails,
-      previewImgs: prevDetails.previewImgs.filter((_, i) => i !== index),
+      preview_img: prevDetails.preview_img.filter((_, i) => i !== index),
     }));
 
-    if (gameDetails.previewImgs.length === 1 && previewRef.current) {
+    if (gameDetails.preview_img.length === 1 && previewRef.current) {
       previewRef.current.value = "";
     }
   };
@@ -193,7 +195,7 @@ const UploadGame = ({ setGames }) => {
   const handleBannerRemove = () => {
     setGameDetails((prevDetails) => ({
       ...prevDetails,
-      bannerImg: "",
+      banner_img: "",
     }));
 
     if (bannerRef.current) {
@@ -202,10 +204,10 @@ const UploadGame = ({ setGames }) => {
   };
 
   const handleBannerUpload = async () => {
-    const uploadBannerImg = async () => {
+    const uploadBanner_img = async () => {
       try {
         const formData = new FormData();
-        formData.append("image", gameDetails.bannerImg);
+        formData.append("image", gameDetails.banner_img);
 
         console.log(gameDetails);
 
@@ -214,22 +216,21 @@ const UploadGame = ({ setGames }) => {
           formData
         );
 
-        console.log(response.data);
-        return response.data.bannerUrl;
+        return response.data.data.url;
       } catch (error) {
         console.error("Error uploading banner:", error);
       }
     };
 
-    const bannerUrl = await uploadBannerImg();
-    console.log("Uploaded Banner URL:", bannerUrl);
+    const bannerUrl = await uploadBanner_img();
+    return bannerUrl;
   };
 
   const handlePreviewUpload = async () => {
     const uploadPreviewImg = async () => {
       try {
         const formData = new FormData();
-        gameDetails.previewImgs.forEach((previewImage) => {
+        gameDetails.preview_img.forEach((previewImage) => {
           formData.append("image", previewImage);
         });
 
@@ -238,15 +239,15 @@ const UploadGame = ({ setGames }) => {
           formData
         );
 
-        console.log(response.data);
-        return response.data.bannerUrl;
+        const urls = response.data.data.map((eachData) => eachData.url);
+        return urls;
       } catch (error) {
-        console.error("Error uploading banner:", error);
+        console.error("Error uploading preview:", error);
       }
     };
 
-    const bannerUrl = await uploadPreviewImg();
-    console.log("Uploaded Banner URL:", bannerUrl);
+    const previewUrls = await uploadPreviewImg();
+    return previewUrls;
   };
 
   return (
@@ -286,7 +287,7 @@ const UploadGame = ({ setGames }) => {
         <label className="text-gray-300 font-semibold">Banner Image</label>
         <input
           type="file"
-          name="bannerImg"
+          name="banner_img"
           accept="image/*"
           ref={bannerRef}
           onChange={(e) => {
@@ -295,17 +296,17 @@ const UploadGame = ({ setGames }) => {
 
             setGameDetails((prevDetails) => ({
               ...prevDetails,
-              bannerImg: file,
+              banner_img: file,
             }));
           }}
           className="w-full mt-2"
         />
         {/* Display Banner Image */}
         <div className="mt-4 flex gap-4 flex-wrap">
-          {gameDetails.bannerImg && (
+          {games?.banner_img && (
             <div className="relative w-24 h-32">
               <img
-                src={gameDetails.bannerImg}
+                src={games?.banner_img}
                 alt={`Banner Img`}
                 className="w-full h-full object-cover rounded-lg shadow-md"
               />
@@ -338,26 +339,26 @@ const UploadGame = ({ setGames }) => {
         <label className="text-gray-300 font-semibold">Preview Images</label>
         <input
           type="file"
-          name="previewImgs"
+          name="preview_img"
           accept="image/*"
           multiple
           ref={previewRef}
           onChange={(e) => {
             const files = Array.from(e.target.files).slice(
               0,
-              5 - gameDetails.previewImgs.length
+              5 - gameDetails.preview_img.length
             );
 
             setGameDetails((prevDetails) => ({
               ...prevDetails,
-              previewImgs: [...prevDetails.previewImgs, ...files].slice(0, 5),
+              preview_img: [...prevDetails.preview_img, ...files].slice(0, 5),
             }));
           }}
           className="w-full mt-2"
         />
         {/* Display Preview Images */}
         <div className="mt-4 flex gap-4 flex-wrap">
-          {gameDetails.previewImgs.map((img, index) => (
+          {gameDetails.preview_img.map((img, index) => (
             <div key={index} className="relative w-24 h-32">
               <img
                 src={img}
@@ -386,14 +387,14 @@ const UploadGame = ({ setGames }) => {
           </label>
           <input
             type="text"
-            name="sysReq.os"
+            name="sys_req.os"
             placeholder="Enter OS (comma separated)"
-            value={gameDetails.sysReq.os.join(", ")}
+            value={gameDetails.sys_req.os.join(", ")}
             onChange={(e) => {
               const osArray = e.target.value.split(",").map((os) => os.trim());
               setGameDetails((prevDetails) => ({
                 ...prevDetails,
-                sysReq: { ...prevDetails.sysReq, os: osArray },
+                sys_req: { ...prevDetails.sys_req, os: osArray },
               }));
             }}
             className="w-full p-3 mt-2 bg-gray-800 rounded-lg text-white"
@@ -405,7 +406,7 @@ const UploadGame = ({ setGames }) => {
             type="text"
             name="gpu"
             placeholder="Enter GPU"
-            value={gameDetails.sysReq.gpu}
+            value={gameDetails.sys_req.gpu}
             onChange={handleChangeNested}
             className="w-full p-3 mt-2 bg-gray-800 rounded-lg text-white"
           />
@@ -416,7 +417,7 @@ const UploadGame = ({ setGames }) => {
             type="text"
             name="memory"
             placeholder="Enter Memory"
-            value={gameDetails.sysReq.memory}
+            value={gameDetails.sys_req.memory}
             onChange={handleChangeNested}
             className="w-full p-3 mt-2 bg-gray-800 rounded-lg text-white"
           />
@@ -427,7 +428,7 @@ const UploadGame = ({ setGames }) => {
             type="text"
             name="storage"
             placeholder="Enter Storage"
-            value={gameDetails.sysReq.storage}
+            value={gameDetails.sys_req.storage}
             onChange={handleChangeNested}
             className="w-full p-3 mt-2 bg-gray-800 rounded-lg text-white"
           />

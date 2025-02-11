@@ -40,6 +40,7 @@ const addGame = async (req, res) => {
       multiplayer,
       tier,
       genre,
+      iarc,
     } = req.body;
 
     const { sellerId } = req;
@@ -56,6 +57,7 @@ const addGame = async (req, res) => {
       multiplayer,
       tier,
       genre,
+      iarc,
     });
 
     await game.save();
@@ -121,6 +123,16 @@ const allGames = async (req, res) => {
   }
 };
 
+const landingPageGames = async (req, res) => {
+  try {
+    const games = await Game.find({}).select("_id title banner_img price");
+
+    res.json({ data: games });
+  } catch (err) {
+    res.status(400).json({ Error: err.message });
+  }
+};
+
 const gameBannerUpload = async (req, res) => {
   cloudinary.uploader.upload(req.file.path, function (err, result) {
     if (err) {
@@ -145,5 +157,6 @@ module.exports = {
   approveGame,
   rejectGame,
   allGames,
+  landingPageGames,
   gameBannerUpload,
 };

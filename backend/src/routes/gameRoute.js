@@ -5,7 +5,7 @@ const {
   approveGame,
   rejectGame,
   allGames,
-  gameBannerUpload,
+  landingPageGames,
 } = require("../controllers/gameController");
 const sellerAuth = require("../middlewares/sellerAuth");
 const adminAuth = require("../middlewares/adminAuth");
@@ -20,6 +20,7 @@ router.patch("/approveGame", sellerAuth, approveGame);
 router.patch("/rejectGame", sellerAuth, rejectGame);
 
 router.get("/allGames", adminAuth, allGames);
+router.get("/landingPageGames", landingPageGames);
 
 // router.post("/uploadBanner", multerMiddleware, gameBannerUpload);
 // router.post("/uploadBanner", upload.single("image"), gameBannerUpload);
@@ -33,27 +34,38 @@ router.post("/uploadBanner", upload.single("image"), function (req, res) {
     });
   }
 
-  cloudinary.uploader.upload(req.file.path, function (err, result) {
-    if (err) {
-      console.log(err);
-      return res.status(500).json({
-        success: false,
-        message: "Error",
+  cloudinary.uploader.upload(
+    req.file.path,
+    {
+      transformation: [
+        {
+          quality: "50",
+        },
+      ],
+    },
+    function (err, result) {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: false,
+          message: "Error",
+        });
+      }
+      console.log(result);
+
+      fs.unlink(req.file.path, (err) => {
+        if (err) {
+          console.error("Error deleting file:", err);
+        }
+      });
+
+      res.status(200).json({
+        success: true,
+        message: "Uploaded!",
+        data: result,
       });
     }
-
-    fs.unlink(req.file.path, (err) => {
-      if (err) {
-        console.error("Error deleting file:", err);
-      }
-    });
-
-    res.status(200).json({
-      success: true,
-      message: "Uploaded!",
-      data: result,
-    });
-  });
+  );
 });
 
 router.post(
@@ -69,7 +81,13 @@ router.post(
 
     try {
       const uploadPromises = req.files.map((file) =>
-        cloudinary.uploader.upload(file.path)
+        cloudinary.uploader.upload(file.path, {
+          transformation: [
+            {
+              quality: "50",
+            },
+          ],
+        })
       );
 
       const results = await Promise.all(uploadPromises);

@@ -11,7 +11,7 @@ const gameSchema = new mongoose.Schema({
     type: String,
     required: true,
     minLength: 20,
-    maxLength: 100,
+    maxLength: 250,
   },
   author: {
     type: mongoose.Schema.Types.ObjectId,

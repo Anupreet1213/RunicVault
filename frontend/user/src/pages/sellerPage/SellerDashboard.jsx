@@ -9,24 +9,7 @@ const SellerDashboard = () => {
   const [activeTab, setActiveTab] = useState(
     () => localStorage.getItem("activeTab") || "dashboard"
   );
-  const [games, setGames] = useState([
-    {
-      id: 1,
-      title: "Cyber Quest",
-      genre: "Action",
-      price: "$19.99",
-      status: "approved",
-      soldCopies: 120,
-    },
-    {
-      id: 2,
-      title: "Horror Mansion",
-      genre: "Horror",
-      price: "$14.99",
-      status: "pending",
-      soldCopies: 45,
-    },
-  ]);
+  const [games, setGames] = useState([]);
 
   useEffect(() => {
     localStorage.setItem("activeTab", activeTab);
@@ -62,7 +45,9 @@ const SellerDashboard = () => {
       {/* Main Content */}
       <main className="flex-1 p-6 overflow-y-auto">
         {activeTab === "dashboard" && <Dashboard games={games} />}
-        {activeTab === "upload" && <UploadGame setGames={setGames} />}
+        {activeTab === "upload" && (
+          <UploadGame games={games} setGames={setGames} />
+        )}
         {activeTab === "manage" && (
           <ManageGame games={games} setGames={setGames} />
         )}
