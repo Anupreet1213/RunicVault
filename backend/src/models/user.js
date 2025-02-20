@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
   purchasedGames: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Game", // Reference to Game model
+      ref: "Game",
       default: [],
     },
   ],
@@ -64,6 +64,13 @@ const userSchema = new mongoose.Schema({
     enum: ["Amateur", "Advanced", "Elite"],
     default: "Amateur",
   },
+  otp: String,
+  otpExpires: {
+    type: Date,
+    expires: 300,
+  },
+  resetPasswordToken: { type: String },
+  resetPasswordExpires: { type: Date },
 });
 
 module.exports = mongoose.model("User", userSchema);
