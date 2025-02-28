@@ -46,7 +46,7 @@ const FreeGames = () => {
                   onClick={() => navigate(`/game/${eachFreeGame?._id}`)}
                 >
                   <div
-                    className={`bg-cover bg-center h-84 rounded-xl shrink-0`}
+                    className={` cursor-pointer hover:scale-102 hover:shadow-md shadow-red-400 transition-all ease-in bg-cover h-84 rounded-xl shrink-0 `}
                     style={{
                       backgroundImage: `url(${eachFreeGame?.banner_img})`,
                     }}

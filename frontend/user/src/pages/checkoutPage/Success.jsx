@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { addPurchasedItem, removeCartItem } from "../../utils/userSlice";
+import { FaRegCheckCircle } from "react-icons/fa";
 
 const Success = () => {
   const dispatch = useDispatch();
@@ -41,15 +42,19 @@ const Success = () => {
   }, [sessionId, user._id, dispatch, type]);
 
   return (
-    <div>
-      <h1>Payment Successful!</h1>
-      <p>Thank you for your purchase.</p>
-      <p
+    <div className="flex flex-col items-center justify-center min-h-screen  bg-cover bg-[url(/src/assets/img.jpg)] px-4">
+    <div className="bg-white shadow-lg rounded-2xl hover:scale-102 backdrop-blur-xl shadow-black transition delay-150 duration-300 ease-in-out p-6 text-center max-w-md w-1/2">
+    <FaRegCheckCircle className="w-16 h-16 text-green-500 mx-auto" />
+      {/* <CheckCircleIcon className="w-16 h-16 text-green-500 mx-auto" /> */}
+      <h1 className="text-2xl font-bold text-gray-800 mt-4">Payment Successful!</h1>
+      <p className="text-gray-600 mt-2">Thank you for your purchase.</p>
+      <button
         onClick={() => navigate("/")}
-        className="text-blue-400 hover:text-blue-500"
+        className="mt-4 px-6 py-2 bg-green-600 cursor-pointer text-white rounded-lg shadow-md hover:bg-green-700 transition"
       >
         Go Home
-      </p>
+      </button>
+    </div>
     </div>
   );
 };
