@@ -11,8 +11,6 @@ const VerifyOTP = () => {
   const email = new URLSearchParams(useLocation().search).get("email");
   const type = new URLSearchParams(useLocation().search).get("type");
 
-  console.log(type);
-
   const handleVerify = async () => {
     setError("");
     setSuccess("");
@@ -27,9 +25,7 @@ const VerifyOTP = () => {
       setSuccess("Account verified successfully!");
       setTimeout(() => navigate("/auth/login"), 2000);
     } catch (err) {
-      console.log(err);
       setStatusCode(err?.status);
-
       setError(err?.response?.data?.message);
     }
   };

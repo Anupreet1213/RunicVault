@@ -13,7 +13,7 @@ const Footer = () => {
       <div className="mx-auto max-w-screen-xl px-4 pb-8 pt-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-md">
           <strong className="block text-center text-xl font-bold text-gray-900 sm:text-3xl dark:text-white">
-            ArcadeX
+            Runic Vault
           </strong>
 
           <form className="mt-6">
@@ -27,7 +27,7 @@ const Footer = () => {
                 className="w-full rounded-full border-gray-200 bg-gray-100 p-4 pe-32 text-sm font-medium dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                 id="email"
                 type="email"
-                placeholder="arcadex.com"
+                placeholder="RunicVault.com"
               />
 
               <button className="absolute end-1 top-1/2 -translate-y-1/2 rounded-full bg-red-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-red-700">
@@ -40,7 +40,7 @@ const Footer = () => {
         <div className="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-32">
           <div className="mx-auto max-w-sm lg:max-w-none">
             <p className="mt-4 text-center text-gray-500 lg:text-left lg:text-lg dark:text-gray-400">
-              UNLOCK YOUR INNER BEAST AT ARCADEX 
+              UNLOCK YOUR INNER BEAST AT RUNIC VAULT 
             </p>
 
             <div className="mt-6 flex justify-center gap-4 lg:justify-start">
@@ -153,51 +153,6 @@ const Footer = () => {
           </div>
 
           <div className="grid grid-cols-1 gap-8 text-center lg:grid-cols-3 lg:text-left">
-            <div>
-              <strong className="font-medium text-gray-900 dark:text-white">
-                {" "}
-                Services{" "}
-              </strong>
-
-              <ul className="mt-6 space-y-1">
-                <li>
-                  <a
-                    className="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
-                    href="#"
-                  >
-                    Marketing
-                  </a>
-                </li>
-
-                <li>
-                  <a
-                    className="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
-                    href="#"
-                  >
-                    Graphic Design
-                  </a>
-                </li>
-
-                <li>
-                  <a
-                    className="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
-                    href="#"
-                  >
-                    App Development
-                  </a>
-                </li>
-
-                <li>
-                  <a
-                    className="text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75"
-                    href="#"
-                  >
-                    Web Development
-                  </a>
-                </li>
-              </ul>
-            </div>
-
             <div>
               <strong className="font-medium text-gray-900 dark:text-white">
                 {" "}

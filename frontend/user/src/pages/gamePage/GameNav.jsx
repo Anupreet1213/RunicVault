@@ -12,7 +12,7 @@ const GameNav = () => {
           className="text-[#F7EBD1] text-2xl hover:cursor-pointer"
           onClick={() => navigate("/")}
         >
-          ARACDE X
+          RUNIC VAULT
         </h1>
         <div aria-label="Global" className=" flex gap-6">
           {!seller ? (

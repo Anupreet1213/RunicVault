@@ -44,7 +44,6 @@ const UploadGame = () => {
       fileUrls.push(URL.createObjectURL(value[i]));
     }
     setPreviewUrlTemp(fileUrls);
-    console.log(fileUrls);
   };
 
   const handleChangeNested = (e) => {
@@ -90,8 +89,6 @@ const UploadGame = () => {
         finalGameData,
         { withCredentials: true }
       );
-
-      console.log("Game uploaded successfully:", gameUploadResponse.data);
 
       setGameDetails({
         title: "",
@@ -143,8 +140,6 @@ const UploadGame = () => {
       try {
         const formData = new FormData();
         formData.append("image", gameDetails.banner_img);
-
-        console.log(gameDetails);
 
         const response = await axios.post(
           "http://localhost:5000/api/game/uploadBanner",

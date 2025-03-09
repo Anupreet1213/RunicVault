@@ -84,7 +84,7 @@ const Navbar = () => {
     >
       <div className="mx-auto flex h-16 max-w-screen-xl items-center gap-8">
       <h1 className="text-[#ffffff] cursor-pointer text-2xl" onClick={() => navigate("/")}>
-          ARACDE X
+          RUNIC VAULT
         </h1>
 
         <div className="flex flex-1 items-center justify-end md:justify-between">
@@ -114,12 +114,13 @@ const Navbar = () => {
               >
                 My Purchases
               </a>
-              {/* <a
-              className="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75"
-              href="#"
+              <a
+               className="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75 cursor-pointer"
+               // href="#"
+               onClick={() => alert("Feature Coming Soon!!")}
             >
-              Membership Plans
-            </a> */}
+              Chat Room
+            </a>
             </nav>
           )}
 
@@ -192,7 +193,7 @@ const Navbar = () => {
                 )}
                 <FaRegUserCircle size={24} />
                 <a
-                  className="block rounded-md bg-red-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-red-700 dark:hover:bg-red-500"
+                  className="block rounded-md cursor-pointer bg-red-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-red-700 dark:hover:bg-red-500"
                   onClick={handleLogout}
                 >
                   Sign Out
