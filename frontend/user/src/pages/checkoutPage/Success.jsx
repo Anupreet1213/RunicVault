@@ -41,7 +41,7 @@ const Success = () => {
     };
 
     updateUserData();
-  }, [sessionId, user._id, dispatch, type]);
+  }, [sessionId, user?._id, dispatch, type]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen  bg-cover bg-[url(/src/assets/img.jpg)] px-4">
