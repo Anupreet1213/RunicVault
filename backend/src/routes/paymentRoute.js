@@ -4,6 +4,7 @@ const Game = require("../models/game");
 
 const router = express.Router();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const url = "https://runic-vault.vercel.app";
 
 router.post("/createCheckoutSession", async (req, res) => {
   try {
@@ -34,8 +35,8 @@ router.post("/createCheckoutSession", async (req, res) => {
           },
         ],
         mode: "payment",
-        success_url: `http://localhost:5173/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: "http://localhost:5173/cancel",
+        success_url: `${url}/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${url}/cancel`,
       });
 
       return res.json({ id: session.id });
@@ -59,8 +60,8 @@ router.post("/createCheckoutSession", async (req, res) => {
         })),
         mode: "payment",
         success_url:
-          "http://localhost:5173/success?session_id={CHECKOUT_SESSION_ID}",
-        cancel_url: "http://localhost:5173/cancel",
+          `${url}/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${url}/cancel`,
       });
 
       return res.json({ id: session.id });

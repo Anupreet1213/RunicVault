@@ -24,6 +24,8 @@ const sendEmailForgot = async (to, subject, text) => {
   });
 };
 
+const url = "https://runic-vault.vercel.app";
+
 const signup = async (req, res) => {
   try {
     const { name, email, password, type } = req.body;
@@ -290,7 +292,7 @@ const forgotPassword = async (req, res) => {
     resetPasswordExpires: Date.now() + 3600000,
   });
 
-  const resetUrl = `http://localhost:5173/resetPassword/${token}`;
+  const resetUrl = `${url}/resetPassword/${token}`;
   const message = `Click the following link to reset your password: ${resetUrl}`;
 
   await sendEmailForgot(user.email, "Password Reset Request", message);
