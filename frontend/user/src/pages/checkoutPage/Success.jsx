@@ -17,7 +17,7 @@ const Success = () => {
   const url = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
-    if (!sessionId || user || !user?._id || requestMade.current) return;
+    if (!sessionId || !user || !user?._id || requestMade.current) return;
 
     const updateUserData = async () => {
       try {
