@@ -14,6 +14,8 @@ const Signup = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
+  
+  const url = import.meta.env.VITE_API_BASE_URL;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,7 +33,7 @@ const Signup = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/signup",
+        `${url}/api/auth/signup`,
         userData
       );
       setSuccess("OTP sent to your email. Please verify.");

@@ -31,6 +31,8 @@ const UploadGame = () => {
   const bannerRef = useRef(null);
   const previewRef = useRef(null);
   const seller = useSelector((store) => store.seller);
+  
+  const url = import.meta.env.VITE_API_BASE_URL;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -85,7 +87,7 @@ const UploadGame = () => {
 
       // Send game details to backend
       const gameUploadResponse = await axios.post(
-        "http://localhost:5000/api/game/addGame",
+        `${url}/api/game/addGame`,
         finalGameData,
         { withCredentials: true }
       );
@@ -142,7 +144,7 @@ const UploadGame = () => {
         formData.append("image", gameDetails.banner_img);
 
         const response = await axios.post(
-          "http://localhost:5000/api/game/uploadBanner",
+          `${url}/api/game/uploadBanner`,
           formData
         );
 
@@ -165,7 +167,7 @@ const UploadGame = () => {
         });
 
         const response = await axios.post(
-          "http://localhost:5000/api/game/uploadPreviews",
+          `${url}/api/game/uploadPreviews`,
           formData
         );
 

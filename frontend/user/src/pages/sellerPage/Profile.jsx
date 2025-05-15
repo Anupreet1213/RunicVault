@@ -11,6 +11,8 @@ const Profile = () => {
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  
+  const url = import.meta.env.VITE_API_BASE_URL;
 
   const handleSave = async () => {
     if (!newName.trim()) return;
@@ -19,7 +21,7 @@ const Profile = () => {
 
     try {
       const { data } = await axios.patch(
-        "http://localhost:5000/api/seller/updateSeller",
+        `${url}/api/seller/updateSeller`,
         {
           sellerId: seller._id,
           name: newName,

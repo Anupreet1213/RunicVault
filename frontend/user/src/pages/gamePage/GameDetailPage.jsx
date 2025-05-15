@@ -16,6 +16,8 @@ const GameDetailPage = () => {
   const gameDetails = useSelector((state) => state.game.gameDetails[gameId]);
   const [selectedPreview, setSelectedPreview] = useState(-1);
   // const navigate = useNavigate();
+  
+  const url = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     if (gameDetails) return;
@@ -23,7 +25,7 @@ const GameDetailPage = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/game/getGame/${gameId}`
+          `${url}/api/game/getGame/${gameId}`
         );
         dispatch(setGameDetails({ gameId, details: response.data.data }));
       } catch (error) {

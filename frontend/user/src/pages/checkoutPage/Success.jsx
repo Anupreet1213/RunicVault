@@ -13,6 +13,8 @@ const Success = () => {
   const navigate = useNavigate();
   const requestMade = useRef(false);
   const type = localStorage.getItem("type");
+  
+  const url = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     if (!sessionId || !user?._id || requestMade.current) return;
@@ -21,7 +23,7 @@ const Success = () => {
       try {
         requestMade.current = true;
         const { data } = await axios.post(
-          "http://localhost:5000/api/user/paymentSuccess",
+          `${url}/api/user/paymentSuccess`,
           { userId: user._id, sessionId },
           { withCredentials: true }
         );

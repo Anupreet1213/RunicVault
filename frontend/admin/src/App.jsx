@@ -22,11 +22,14 @@ function App() {
   const admin = useSelector((store) => store.admin);
   const [loading, setLoading] = useState(true);
 
+  
+  const url = import.meta.env.VITE_API_BASE_URL;
+
   useEffect(() => {
     const verifyAdmin = async () => {
       try {
         const response = await axios.post(
-          "http://localhost:5000/api/auth/refresh",
+          `${url}/api/auth/refresh`,
           { type: "Admin" },
           { withCredentials: true }
         );

@@ -11,6 +11,8 @@ const GameRight = ({ price, gameId }) => {
   const [loading, setLoading] = useState(false);
   const { user, seller } = useSelector((state) => state);
   const navigate = useNavigate();
+  
+  const url = import.meta.env.VITE_API_BASE_URL;
 
   const isPurchased = user?.purchasedGames?.includes(gameId);
   const stripePromise = loadStripe(
@@ -25,7 +27,7 @@ const GameRight = ({ price, gameId }) => {
         return;
       }
       const data = await axios.patch(
-        "http://localhost:5000/api/user/addToCart",
+        `${url}/api/user/addToCart`,
         { gameId: gameId },
         { withCredentials: true }
       );
@@ -65,7 +67,7 @@ const GameRight = ({ price, gameId }) => {
         return;
       }
       const data = await axios.patch(
-        "http://localhost:5000/api/user/addToWishlist",
+        `${url}/api/user/addToWishlist`,
         { gameId: gameId },
         { withCredentials: true }
       );
@@ -107,7 +109,7 @@ const GameRight = ({ price, gameId }) => {
       setLoading(true);
       const stripe = await stripePromise;
       const response = await axios.post(
-        "http://localhost:5000/api/payment/createCheckoutSession",
+        `${url}/api/payment/createCheckoutSession`,
         {
           gameId,
         },

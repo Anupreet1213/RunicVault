@@ -12,6 +12,8 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const url = import.meta.env.VITE_API_BASE_URL;
+
   const [form, setForm] = useState({ password: "" });
 
   const handleChange = (e) => {
@@ -23,7 +25,7 @@ const Login = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        "http://localhost:5000/api/auth/signin",
+        `${url}/api/auth/signin`,
         { password: form.password, type: "Admin" },
         { withCredentials: true }
       );

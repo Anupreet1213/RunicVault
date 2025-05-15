@@ -10,6 +10,8 @@ const VerifyOTP = () => {
   const navigate = useNavigate();
   const email = new URLSearchParams(useLocation().search).get("email");
   const type = new URLSearchParams(useLocation().search).get("type");
+  
+  const url = import.meta.env.VITE_API_BASE_URL;
 
   const handleVerify = async () => {
     setError("");
@@ -17,7 +19,7 @@ const VerifyOTP = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/verifyOtp",
+        `${url}/api/auth/verifyOtp`,
         { email, otp, type }
       );
       setStatusCode(response.status);

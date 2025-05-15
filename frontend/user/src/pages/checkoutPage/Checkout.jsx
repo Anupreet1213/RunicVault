@@ -9,13 +9,15 @@ const stripePromise = loadStripe(
 
 const Checkout = ({ amount, cartItems }) => {
   const [loading, setLoading] = useState(false);
+  
+  const url = import.meta.env.VITE_API_BASE_URL;
 
   const handleCheckout = async () => {
     setLoading(true);
     const stripe = await stripePromise;
 
     const response = await axios.post(
-      "http://localhost:5000/api/payment/createCheckoutSession",
+      `${url}/api/payment/createCheckoutSession`,
       { cartItems, amount }
     );
 

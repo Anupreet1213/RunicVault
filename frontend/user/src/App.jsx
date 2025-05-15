@@ -25,11 +25,13 @@ function App() {
   const { user, seller } = useSelector((store) => store);
   const [loading, setLoading] = useState(true);
 
+  const url = import.meta.env.VITE_API_BASE_URL;
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const responseGames = await axios.get(
-          "http://localhost:5000/api/game/landingPageGames",
+          `${url}/api/game/landingPageGames`,
           { withCredentials: true }
         );
 
@@ -37,7 +39,7 @@ function App() {
 
         const type = localStorage.getItem("type");
         const response = await axios.post(
-          "http://localhost:5000/api/auth/refresh",
+          `${url}/api/auth/refresh`,
           { type: type },
           { withCredentials: true }
         );

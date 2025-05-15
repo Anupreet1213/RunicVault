@@ -12,10 +12,12 @@ const DashboardLayout = () => {
   const dispatch = useDispatch();
   const { seller, user, game } = useSelector((store) => store);
 
+  const url = import.meta.env.VITE_API_BASE_URL;
+
   useEffect(() => {
     const fetchSellers = async () => {
       const sellers = await axios.get(
-        "http://localhost:5000/api/seller/getAllSeller",
+        `${url}/api/seller/getAllSeller`,
         { withCredentials: true }
       );
 
@@ -24,7 +26,7 @@ const DashboardLayout = () => {
 
     const fetchUsers = async () => {
       const users = await axios.get(
-        "http://localhost:5000/api/user/getAllUser",
+        `${url}/api/user/getAllUser`,
         { withCredentials: true }
       );
 
@@ -32,7 +34,7 @@ const DashboardLayout = () => {
     };
 
     const fetchGames = async () => {
-      const games = await axios.get("http://localhost:5000/api/game/allGames", {
+      const games = await axios.get(`${url}/api/game/allGames`, {
         withCredentials: true,
       });
 

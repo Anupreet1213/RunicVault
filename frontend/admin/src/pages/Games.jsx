@@ -7,6 +7,9 @@ const Games = () => {
   const dispatch = useDispatch();
   const { game } = useSelector((store) => store);
 
+  
+  const url = import.meta.env.VITE_API_BASE_URL;
+
   // useEffect(() => {
   //   const fetchGames = async () => {
   //     try {
@@ -30,7 +33,7 @@ const Games = () => {
   const handleApprove = async (gameId) => {
     try {
       await axios.patch(
-        `http://localhost:5000/api/game/approveGame`,
+        `${url}/api/game/approveGame`,
         { _id: gameId },
         { withCredentials: true }
       );

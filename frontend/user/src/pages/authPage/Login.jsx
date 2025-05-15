@@ -17,6 +17,9 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  
+  const url = import.meta.env.VITE_API_BASE_URL;
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUserData({
@@ -33,7 +36,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/signin",
+        `${url}/api/auth/signin`,
         userData,
         {
           withCredentials: true,

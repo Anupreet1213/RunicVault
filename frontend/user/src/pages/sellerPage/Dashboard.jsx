@@ -10,12 +10,14 @@ const Dashboard = ({ games }) => {
   const { sellerGames } = useSelector((store) => store.game);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  
+  const url = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     const fetchGames = async () => {
       try {
         const response = await axios.post(
-          "http://localhost:5000/api/game/sellerGames",
+          `${url}/api/game/sellerGames`,
           games,
           { withCredentials: true }
         );

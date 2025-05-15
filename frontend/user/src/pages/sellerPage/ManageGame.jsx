@@ -7,12 +7,14 @@ import { deleteSellerGames, setSellerGames } from "../../utils/gameSlice";
 const ManageGame = ({ games }) => {
   const { sellerGames } = useSelector((store) => store.game);
   const dispatch = useDispatch();
+  
+  const url = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     const fetchGames = async () => {
       try {
         const response = await axios.post(
-          "http://localhost:5000/api/game/sellerGames",
+          `${url}/api/game/sellerGames`,
           games,
           { withCredentials: true }
         );
@@ -33,7 +35,7 @@ const ManageGame = ({ games }) => {
   const handleDelete = async (gameId) => {
     try {
       const response = await axios.delete(
-        "http://localhost:5000/api/game/deleteGame",
+        `${url}/api/game/deleteGame`,
         { gameId },
         { withCredentials: true }
       );

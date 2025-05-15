@@ -6,10 +6,12 @@ import { IoSearch } from "react-icons/io5";
 
 const Header = () => {
   const dispatch = useDispatch();
+  
+  const url = import.meta.env.VITE_API_BASE_URL;
 
   const handleLogout = async () => {
     try {
-      const response = await axios("http://localhost:5000/api/auth/signout", {
+      const response = await axios(`${url}/api/auth/signout`, {
         withCredentials: true,
       });
 

@@ -10,6 +10,8 @@ const Sellers = () => {
   const sellers = useSelector((store) => store.seller);
   const games = useSelector((store) => store.game);
   const [expandedSellers, setExpandedSellers] = useState({});
+  
+  const url = import.meta.env.VITE_API_BASE_URL;
 
   // Handle seller approval/removal
   const handleRemoveSeller = (sellerId) => {
@@ -31,7 +33,7 @@ const Sellers = () => {
   const handleApproveSeller = async (sellerId) => {
     try {
       const response = await axios.patch(
-        "http://localhost:5000/api/seller/verifySeller",
+        `${url}/api/seller/verifySeller`,
         { _id: sellerId },
         { withCredentials: true }
       );
